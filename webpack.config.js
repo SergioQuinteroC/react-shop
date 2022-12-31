@@ -7,7 +7,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
-    publicPath: "/",
+    publicPath: "./", //! para el despliegue lo importante es el punto
   },
   mode: "development",
   resolve: {
@@ -15,10 +15,15 @@ module.exports = {
     alias: {
       "@components": path.resolve(__dirname, "src/components/"),
       "@containers": path.resolve(__dirname, "src/containers/"),
+      "@hooks": path.resolve(__dirname, "src/hooks/"),
       "@pages": path.resolve(__dirname, "src/pages/"),
-      "@styles": path.resolve(__dirname, "src/styles"),
-      "@icons": path.resolve(__dirname, "src/assets/icons/"),
-      "@logos": path.resolve(__dirname, "src/assets/logos/"),
+      "@routes": path.resolve(__dirname, "src/routes/"),
+      "@context": path.resolve(__dirname, "src/context/"),
+      "@moneyIn": path.resolve(__dirname, "public/moneyIn/"),
+      "@styles": path.resolve(__dirname, "src/styles/"),
+      "@icons": path.resolve(__dirname, "public/icons/"),
+      "@img": path.resolve(__dirname, "public/img/"),
+      "@logos": path.resolve(__dirname, "public/logos/"),
     },
   },
   module: {
@@ -31,6 +36,13 @@ module.exports = {
         },
       },
       {
+        test: /\.(png|jpg|svg|jpeg|web|svg)$/,
+        type: "asset/resource",
+        generator: {
+          filename: "public/[hash][ext]",
+        },
+      },
+      {
         test: /\.html$/,
         use: [
           {
@@ -39,12 +51,8 @@ module.exports = {
         ],
       },
       {
-        test: /\.(css|scss)$/i,
+        test: /\.(css|scss)$/,
         use: ["style-loader", "css-loader", "sass-loader"],
-      },
-      {
-        test: /\.(png|svg|jpg|gif)$/,
-        type: "asset",
       },
     ],
   },
@@ -58,9 +66,11 @@ module.exports = {
     }),
   ],
   devServer: {
-    static: path.join(__dirname, "dist"),
+    static: {
+      directory: path.join(__dirname, "public"),
+    },
     compress: true,
-    port: 3005,
+    port: 64340,
     historyApiFallback: true,
   },
 };
